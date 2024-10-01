@@ -1,8 +1,12 @@
 // 초기 App.jsx
 import './App.css'
-import {BrowserRouter, Link} from "react-router-dom";
+import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import {FaCalendarAlt, FaDoorOpen, FaUsers} from "react-icons/fa";
 import UserPicker from "./component/Users/UserPicker.jsx";
+import React from "react";
+import BookablePage from "./component/Bookables/BookablePage.jsx";
+import UserPages from "./component/Users/UserPages.jsx";
+import BookingsPage from "./component/Bookings/BookingsPage.jsx";
 
 // index.html이 처름 요청으로 반환되는 페이지
 // html은 더 만들지 않는다. : SinglePageApplication(SPA)
@@ -37,6 +41,12 @@ function App() {
                     </nav>
                     <UserPicker/>
                 </header>
+                {/* 사용자 선택한 메뉴 항목에 따라 화면에 보이는 UI를 결정한다. */}
+                <Routes>
+                    <Route path="/bookings" element={<BookingsPage/>}></Route>
+                    <Route path="/bookables" element={<BookablePage/>}></Route>
+                    <Route path="/users" element={<UserPages/>}></Route>
+                </Routes>
             </div>
       </BrowserRouter>
   )
