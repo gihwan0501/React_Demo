@@ -18,6 +18,7 @@ export default function reducer(state, action) {
             // return state
             throw new Error(`알 수 없는 action type: ${action.type}`)
     }
+
 }
 
 
