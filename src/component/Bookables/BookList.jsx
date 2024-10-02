@@ -1,21 +1,24 @@
 import {bookables, days, sessions} from "../../static.json"
-import {useState} from "react";
+import {useReducer, useState} from "react";
 import {FaArrowRight} from "react-icons/fa";
 
 function BookList() {
+    // 상태를 관리할 변수들 초기값 객체
+    const initState = {
+        group: "Rooms",
+        bookableIndex: "0",
+        hasDetails: false
+    }
+    // state는 상태값들을 모아놓은 object이다.
+    const [state, dispatch] = useReducer(reducer, initState)
+    const {group, bookableIndex, hasDetails} = state
 
-    const [group, setGroup] = useState("Rooms")
     const bookableGroup = bookables.filter(b => (b.group === group))
-    // 상태값 관리를 해야 할 변수 bookableIndex
-    // setBookableIndex는 useState가 리턴해주는 메소드. (값 변경 메소드)
-    const [bookableIndex, setBookableIndex] = useState(0)
     const groups = [...new Set(bookables.map(b=>b.group))]// 현재 상황인거고, 그룹이 추가되면 바꿔야함 ["Rooms", "Kit"]
-    // b.group만 가져와서 컬렉션.중복값은 1개만 저장하기 위해 Set 자료구조
-    // ...은 Set 오브젝트를 배열로 변환
+
 
     function nextBookableIndex() {
         setBookableIndex((i) => (i+1) % bookableGroup.length)
-        // 상태값 변경 메소드의 인자 i는 bookableIndex 값
     }
 
     function changeGroup(event) {
