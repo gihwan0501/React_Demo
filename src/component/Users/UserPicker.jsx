@@ -1,5 +1,5 @@
-function UserPicker() {
-    return (
+function UserPicker(){
+    return(
         <select>
             <option>사용자</option>
         </select>

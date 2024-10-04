@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
-import PageSpinner from "./PageSpinner.jsx";
+import PageSpinner from "../UI/PageSpinner.jsx";
+import Modal from "../UI/Modal.jsx";
 
 function UserList (){
     const [users, setUsers] = useState(null)
@@ -13,7 +14,7 @@ function UserList (){
     //api 서비스 제공하는 서버로부터 데이터 가져오기
     useEffect(() => {
         setLoading(true)
-        fetch("http://localhost:3002/users")
+        fetch("http://localhost:3001/users")
             .then( response =>{
                 return response.json()
             })
@@ -31,23 +32,19 @@ function UserList (){
         return <div>오류 : {error}</div>
     }
 
-    if(loading) {   //스피너 컴포넌트 사용할 수 있습니다.
+/*    if(loading) {   //스피너 컴포넌트 사용할 수 있습니다.
         // return <div>Loading.......</div>
         return (
-            <PageSpinner/>
+                <PageSpinner/>
         )
-    }
+    }*/
 
     return(
         <>
             {users && (<ul className="users items-list-nav">
                 {users.map((u, i) => (
-                    <li key={u.id}
-                        className={i === userIndex ? "selected" : null}>
-                        <button className="btn btn-header"
-                                onClick={() => setUserIndex(i)}>
-                            {u.name}
-                        </button>
+                    <li key={u.id} className={i === userIndex ? "selected" : null}>
+                        <button className="btn btn-header" onClick={() => setUserIndex(i)}>{u.name}</button>
                     </li>
                 ))}
             </ul>)}
@@ -60,6 +57,10 @@ function UserList (){
                     <p>{user.notes}</p>
                 </div>
             </div>)}
+
+            <Modal isOpen={loading}>
+                <PageSpinner />
+            </Modal>
         </>
     )
 }
