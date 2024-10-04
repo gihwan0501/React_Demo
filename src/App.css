@@ -193,7 +193,17 @@ main {
   list-style: square;
 }
 
-date-picker > span {
+.date-picker {
+  display:flex;
+  margin:0 0 1em;
+  justify-content: space-between;
+  align-items: center;
+}
+.date-picker button {
+  width:8em;
+}
+
+.date-picker > span {
   flex-grow: 2;
   display: flex;
   align-items: center;
@@ -218,15 +228,6 @@ date-picker > span {
   height: 100%;
 }
 
-.date-picker {
-  display:flex;
-  margin:0 0 1em;
-  justify-content: space-between;
-  align-items: center;
-}
-.date-picker button {
-  width:8em;
-}
 
 @keyframes spin {
   100% {
@@ -235,6 +236,7 @@ date-picker > span {
 }
 .page-loading {
   font-size: 300%;
+
 }
 .icon-loading {
   animation: spin 1.5s linear infinite;
@@ -242,4 +244,3 @@ date-picker > span {
 header .icon-loading {
   color: white;
 }
-
