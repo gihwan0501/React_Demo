@@ -1,79 +1,135 @@
-import {bookables, days, sessions} from "../../static.json"
-import {useState} from "react";
+import {days,sessions} from "../../static.json"
+import {useEffect, useReducer,useState} from "react";
 import {FaArrowRight} from "react-icons/fa";
+import reducer from "./reducer.js";
+import PageSpinner from "../UI/PageSpinner.jsx";
+import Modal from "../UI/Modal.jsx";
 
-function BookList() {
-
-    const [group, setGroup] = useState("Rooms")
-    const bookableGroup = bookables.filter(b => (b.group === group))
-    // 상태값 관리를 해야 할 변수 bookableIndex
-    // setBookableIndex는 useState가 리턴해주는 메소드. (값 변경 메소드)
-    const [bookableIndex, setBookableIndex] = useState(0)
-    const groups = [...new Set(bookables.map(b=>b.group))]// 현재 상황인거고, 그룹이 추가되면 바꿔야함 ["Rooms", "Kit"]
-    // b.group만 가져와서 컬렉션.중복값은 1개만 저장하기 위해 Set 자료구조
-    // ...은 Set 오브젝트를 배열로 변환
-
-    function nextBookableIndex() {
-        setBookableIndex((i) => (i+1) % bookableGroup.length)
-        // 상태값 변경 메소드의 인자 i는 bookableIndex 값
+function BookList(){
+    //상태를 관리할 변수들 초기값 객체
+    const initState ={
+        group: "Rooms",
+        bookableIndex: 0,
+        hasDetails: false
     }
 
-    function changeGroup(event) {
-        setGroup(event.target.value)
-        setBookableIndex(0)
+    //state 는 상태값들을 모아놓은 오브젝트
+    const [state, dispatch] = useReducer(reducer, initState)
+    const {group, bookableIndex,hasDetails} = state
+
+    const [bookables, setBookables] = useState(null)
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        setLoading(true)
+        fetch("http://localhost:3002/bookables")
+            .then(response => {
+                return response.json()
+            })
+            .then(
+                data => {
+                    setBookables(data)
+                    setLoading(false)
+                }
+            )
+            .catch((error) => setError(error.message))
+    }, []);
+
+    if(error){
+        return <div>오류 : {error}</div>
+    }
+
+    if(loading){
+        return <span><PageSpinner/>Loading....</span>
+    }
+
+    const bookableGroup = bookables.filter(b =>(b.group ===group))
+    const groups = [...new Set(bookables.map(b=>b.group))]    //현재 상황 ["Rooms","Kit"]
+
+    function nextBookableIndex(){
+        dispatch({
+            type:"NEXT_BOOKABLE",
+            payload: bookableGroup.length
+        })
+    }
+
+    function changeGroup(e){
+        dispatch({
+            type: "SET_GROUP",
+            payload: e.target.value
+        })
+    }
+
+    function changeBookableIndex(selectIndex){
+        dispatch({
+            type:"SET_BOOKABLE",
+            payload: selectIndex
+        })
+    }
+
+    function toggleDetails(){
+        dispatch({
+            type:"TOGGLE_HAS_DETAILS"
+        })
     }
 
     const bookable = bookableGroup[bookableIndex]
-    const [hasDetails, setHasDetails] = useState(false);
     return (
         <>
-        <div>
-            <select value={group} onChange={changeGroup}>
-                {groups.map(g =><option key={g} value={g}>{g}</option>)}
-            </select>
-        <ul className="items-list-nav">
-            {bookableGroup.map((b,i) => (
-                <li key={b.id}
-                    className={i=== bookableIndex? "selected":null}>
-                    <button className="btn"
-                        onClick={() => setBookableIndex(i)}>
-                        {b.title}
-                    </button>
-                </li>
-            ))}
-        </ul>
-            <p>
-                <button className="btn" onClick={nextBookableIndex}>
-                    <FaArrowRight/><span>Next</span>
-                </button>
-            </p>
-        </div>
+            <div>
+                <select value={group}
+                        onChange={changeGroup}>
+                    {groups.map(g=><option key={g} value={g}>{g}</option>)}
+                </select>
+                <ul className="bookables items-list-nav">
+                    {bookableGroup.map((b,i) => (
+                        <li key={b.id}
+                            className={i=== bookableIndex? "selected":null}>
+                            <button className="btn"
+                                    onClick={()=> changeBookableIndex(i)}>
+                                {b.title}
+                            </button>
 
-        {/* 새로운 UI 추가, CSS 추가 : 상세 내용 */}
-        <div className="book-details">
-            <div className="item">
-                <h2>{bookable.title}</h2>
-                <span className="controls">
-                    <label>
-                        <input type="checkbox" checked={hasDetails} onChange={()=>setHasDetails(has=>!has)}/>
-                    </label>
-                </span>
+                        </li>
+                    ))}
+                </ul>
+                <p>
+                    <button className="btn" onClick={nextBookableIndex}>
+                        <FaArrowRight/><span>Next</span>
+                    </button>
+                </p>
             </div>
-            <p>{bookable.notes}</p>
-            {hasDetails && (
-                <div className="item-details">
-                    <h3>사용 가능한 요일과 세션</h3>
-                    <div className="bookable-availability">
-                        <ul>
-                            {bookable.days.sort().map(d => <li key={d}>{days[d]}</li>)}
-                        </ul>
-                        <ul>
-                            {bookable.sessions.sort().map(s => <li key={s}>{sessions[s]}</li>)}
-                        </ul>
+
+            {/* 새로운 UI 추가  : 상세 내용*/}
+            <div className="book-details">
+                <div className="item">
+                    <div className="item-header">
+                        <h2>{bookable.title}</h2>
+                        <span className="controls">
+                        <label>
+                            <input type="checkbox" checked={hasDetails}
+                                   onChange={toggleDetails}
+                            />
+                        </label>
+                    </span>
                     </div>
+                    <p>{bookable.notes}</p>
+                    {hasDetails && (
+                        <div className="item-details">
+                            <h3>사용가능한 요일과 세션</h3>
+                            <div className="bookable-availability">
+                                <ul>
+                                    {bookable.days.sort().map(d => <li key={d}>{days[d]}</li>)}
+                                </ul>
+                                <ul>
+                                    {bookable.sessions.sort().map(s => <li key={s}>{sessions[s]}</li>)}
+                                </ul>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            )}
-        </div>
+            </div>
         </>
     )
 }
