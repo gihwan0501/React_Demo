@@ -62,13 +62,9 @@ export default function BookablesList ({bookable, setBookable}) {
             <ul className="bookables items-list-nav">
                 {/* 기존 코드 (b,i) 인자를 받아서 i 인덱스 상태를 변경함*/}
                 {bookablesInGroup.map(b => (
-                    <li
-                        key={b.id}
-                        className={b.id === bookable.id ? "selected" : null}
+                    <li key={b.id} className={b.id === bookable.id ? "selected" : null}
                     >  {/* 순서2) 재렌더링 css 변경. bookalble 은 새로운 상태값*/}
-                        <button
-                            className="btn"
-                            onClick={() => setBookable(b)}
+                        <button className="btn" onClick={() => setBookable(b)}
                         >  {/* 순서 1) bookable 상태를 변경  */}
                             {b.title}
                         </button>
@@ -76,11 +72,7 @@ export default function BookablesList ({bookable, setBookable}) {
                 ))}
             </ul>
             <p>
-                <button
-                    className="btn"
-                    onClick={nextBookable}
-                    autoFocus
-                >
+                <button className="btn" onClick={nextBookable} autoFocus>
                     <FaArrowRight/>
                     <span>Next</span>
                 </button>

@@ -8,9 +8,7 @@ function BookingsPage(){
 
     return(
         <main className="bookings-page">
-          <BookablesList
-              bookable={bookable}
-              setBookable={setBookable}/>
+          <BookablesList bookable={bookable} setBookable={setBookable}/>
    {/* BookablesList 선택한 bookable 객체는 부모, 형제 Bookings 와 공유*/}
           <Bookings bookable={bookable}/>
         </main>

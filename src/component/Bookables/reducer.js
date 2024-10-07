@@ -10,24 +10,16 @@ export default function reducer(state, action){
             }
 
         case "SET_BOOKABLE":
-            return{
-                ...state,
-                bookableIndex: action.payload     /* 선택 인덱스를 payload 값으로 변경*/
-            }
+            return{...state, bookableIndex: action.payload     /* 선택 인덱스를 payload 값으로 변경*/}
 
         case "TOGGLE_HAS_DETAILS":
-            return{
-                ...state,
-                hasDetails: !state.hasDetails    /* hasDetails 는 not 연산*/
-            }
+            return{...state, hasDetails: !state.hasDetails    /* hasDetails 는 not 연산*/}
 
         case "NEXT_BOOKABLE":
         {
             // const count = state.bookables.filter(
             // b=> b.group === state.group).length;
-            return{
-                ...state,
-                bookableIndex: (state.bookableIndex +1) % action.payload
+            return{...state, bookableIndex: (state.bookableIndex +1) % action.payload
             };
         }
 

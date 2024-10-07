@@ -15,19 +15,10 @@ export default function Bookings({bookable}){
     return (
         <div className="bookings">
             <div>
-                <WeekPicker
-                    week = {week}
-                    dispatch = {dispatch}/>
-                <BookingsGrid
-                    week={week}
-                    bookable={bookable}
-                    booking={booking}
-                    setBooking={setBooking}/>
+                <WeekPicker week = {week} dispatch = {dispatch}/>
+                <BookingsGrid week={week} bookable={bookable} booking={booking} setBooking={setBooking}/>
             </div>
-                <BookingDetails
-                    booking={booking}
-                    bookable={bookable}/>
-
+                <BookingDetails booking={booking} bookable={bookable}/>
         </div>
     )
 }

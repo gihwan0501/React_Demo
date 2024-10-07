@@ -9,8 +9,13 @@ export default function BookingsGrid ({week, bookable, booking, setBooking}){
     const [bookings, setBookings] = useState(null)
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
-
-    const {grid, sessions, dates}=  bookable ? getGrid(bookable, week.start) : {}
+    
+    // 비용이 높은 함수 getGrid를 useMemo 훅 사용하기
+    // 네트워크 지연 시 시간이 오래 걸릴 getGrid 함수를 메모화
+    const {grid, sessions, dates}=  useMemo(
+        () => bookable ? getGrid(bookable, week.start) : {},
+        [bookable,week.start]
+    )
     /* grid 객체는 예약 가능 자원 요소들을 저장한 객체.
     *
     * bookings 는 예약 정보가 저장된 객체. 해당 session과 date 에 예약 정보를 가져오기. 정보가 없다면
@@ -55,9 +60,7 @@ export default function BookingsGrid ({week, bookable, booking, setBooking}){
             && booking?.date === date;
 
         return (
-            <td
-                key={date}
-                className={isSelected ? "selected" : null}
+            <td key={date} className={isSelected ? "selected" : null}
                 onClick={bookings ? () => setBooking(cellData) : null}
             >  {/*순서1) 그리드의 각 셀을 클릭했을 때 해당 cellData 정보가 booking 에 저장*/}
                 {cellData.title}
