@@ -10,7 +10,7 @@ import UserContext from "./component/Users/UserContext.js";
 
 function App() {
     const [user, setUser] = useState()
-    console.log('-App user -',user)
+    // console.log('-App user -',user)
 
     return (
         <UserContext.Provider value={{user,setUser}}>
