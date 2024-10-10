@@ -14,7 +14,7 @@ function UserList (){
     //api 서비스 제공하는 서버로부터 데이터 가져오기
     useEffect(() => {
         setLoading(true)
-        fetch("http://localhost:3002/users")
+        fetch("http://localhost:3001/users")
             .then( response =>{
                 return response.json()
             })
