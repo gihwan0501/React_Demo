@@ -22,7 +22,7 @@ export default function useFetch(url) {
                 if (doUpdate) {
                     setData(data) // 상태값 변경함수 실행
                     setStatus("success")
-                    console.log("---* query.data", data)
+                    // console.log("---* query.data", data)
                 }
             })
             .catch(error => {

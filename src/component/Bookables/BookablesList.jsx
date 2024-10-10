@@ -14,7 +14,9 @@ export default function BookablesList ({bookable, setBookable}) {
     const {data:bookables= [], status, error} = useFetch(
         "http://localhost:3001/bookables"
     )
-    // 현재 컴포넌트의 bookable 인자는 select로 선택하는 그룹
+    // 현재 컴포넌트의 bookable 인자는 select로 선택하는 그룹값을 포함
+    // 페이지 전환으로 처음 컴포넌트가 호출되면 ?. 조건에 따라 group은 undefined
+    // 아래 useEffect에서 setBookable 실행(초기화) 되면 group, bookablesInGroup 2개의 값이 결정됨
     const group = bookable?.group;
     const bookablesInGroup = bookables.filter(b => b.group === group);
     // bookables를 fetch한 후에 새로운 그룹이 있을 경우 실행 필요
