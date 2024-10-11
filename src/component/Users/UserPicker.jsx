@@ -46,12 +46,8 @@ export default function UserPicker(){
         /*순서2) value 가 users 배열 0번 객체로 설정
         *    선택을 바꾸는 이벤트는 handleSelect 처리
         * */
-        <select
-            className="user-picker"
-            onChange={handleSelect} value={user?.id}>   
-            {users.map(u =>
-                <option key={u.id} value={u.id}>{u.name}</option>
-            )}
+        <select className="user-picker" onChange={handleSelect} value={user?.id}>
+            {users.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
         </select>
     );
 }
