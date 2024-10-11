@@ -1,8 +1,8 @@
-import {Link, useParams} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useFetch from "../utils/useFetch.js";
 import BookableDetails  from "./BookableDetails.jsx";
 import BookablesList from "./BookablesList.jsx";
-import {FaPlus} from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import PageSpinner from "../UI/PageSpinner.jsx";
 import {useQuery} from "react-query";
 import loadData from "../utils/api.js";
