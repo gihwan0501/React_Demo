@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import useFetch from "../utils/useFetch.js";
 import BookableDetails  from "./BookableDetails.jsx";
 import BookablesList from "./BookablesList.jsx";
 import { FaPlus } from "react-icons/fa";
@@ -10,7 +11,7 @@ export default function BookablesView () {
 
     //useQuery 의 리턴은 fetch 결과는 data 프로퍼티에 저장. 프로퍼티값은 bookables 에 저장
     // status,error 추가적인 실행 상태 정보도 전달. => 카톡 그림 참고
-    const {data: bookables = [], status={}, error} = useQuery(
+    const {data: bookables = [], status, error} = useQuery(
         "bookables",
         ()=> loadData("http://localhost:3001/bookables")
     );
@@ -20,7 +21,7 @@ export default function BookablesView () {
     // 비동기 함수를 실행하기 전에 cache 에서 key를 가져와서 컴포넌에게 전달.비동기함수는 백그라운드에서
     // 실행합니다.변경된 데이터가 있으면 다시 반영.
 
-    // useParams : url 경로에서 모든 파라미터 값을 저장한 객체를 반환한다.
+    // useParams : url 경로에서 모든 파라미터 값을 저장한 객체를 반환한다. 
     const {id} = useParams();
     console.log('- bookables id',typeof id)   // bookables 의 id는 문자열
     console.log('- BookablesView bookables-',bookables)
@@ -35,21 +36,29 @@ export default function BookablesView () {
     if (status === "loading") {
         return <PageSpinner/>
     }
-
+    
     return (
         <main className="bookables-page">
-            <div>
-                <BookablesList bookable={bookable} bookables={bookables} getUrl={id => `/bookables/${id}`}/>
-                <p className="controls">
-                    <Link to="/bookables/new" replace={true} className="btn">
-                        <FaPlus/>
-                        <span>New</span>
-                    </Link>
-                </p>
-            </div>
+        <div>
+            <BookablesList
+                bookable={bookable}
+                bookables={bookables}
+                getUrl={id => `/bookables/${id}`}
+            />
 
-            <BookableDetails bookable={bookable}/>
-        </main>
+            <p className="controls">
+                <Link
+                    to="/bookables/new"
+                    replace={true}
+                    className="btn">
+                    <FaPlus/>
+                    <span>New</span>
+                </Link>
+            </p>
+        </div>
+
+        <BookableDetails bookable={bookable}/>
+    </main>
     );
     //bookable state 상태 변화는 자식 컴포넌트에서 발생하고
     //   변경된 상태를 부모에게로 전달. - BookablesList 형제 컴포넌트 BookableDetails

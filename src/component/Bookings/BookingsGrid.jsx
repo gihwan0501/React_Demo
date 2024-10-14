@@ -9,9 +9,9 @@ export default function BookingsGrid ({week, bookable, booking, setBooking}){
     const [bookings, setBookings] = useState(null)
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
-    
-    // 비용이 높은 함수 getGrid를 useMemo 훅 사용하기
-    // 네트워크 지연 시 시간이 오래 걸릴 getGrid 함수를 메모화
+
+    // 비용(시간) 이 높은 함수 getGrid 를 useMemo 훅 사용하기
+    //  네트워크 지연시 시간이 오래 걸릴 getGrid 함수를 메모화
     const {grid, sessions, dates}=  useMemo(
         () => bookable ? getGrid(bookable, week.start) : {},
         [bookable,week.start]
@@ -60,7 +60,9 @@ export default function BookingsGrid ({week, bookable, booking, setBooking}){
             && booking?.date === date;
 
         return (
-            <td key={date} className={isSelected ? "selected" : null}
+            <td
+                key={date}
+                className={isSelected ? "selected" : null}
                 onClick={bookings ? () => setBooking(cellData) : null}
             >  {/*순서1) 그리드의 각 셀을 클릭했을 때 해당 cellData 정보가 booking 에 저장*/}
                 {cellData.title}
@@ -74,15 +76,15 @@ export default function BookingsGrid ({week, bookable, booking, setBooking}){
 
 
     return (
-      <>
-          {error && (
-              <p className="bookingsError">
-                  {`There was a problem loading the bookings data (${error})`}
-              </p>
-          )}
-        <table className={bookings? "bookingsGrid active":"bookingsGrid"}
-        >
-            <thead>
+        <>
+            {error && (
+                <p className="bookingsError">
+                    {`There was a problem loading the bookings data (${error})`}
+                </p>
+            )}
+            <table className={bookings? "bookingsGrid active":"bookingsGrid"}
+            >
+                <thead>
                 <tr>
                     <th>
                         <span className="status">
@@ -95,17 +97,17 @@ export default function BookingsGrid ({week, bookable, booking, setBooking}){
                         </th>
                     ))}
                 </tr>
-            </thead>
-            <tbody>
-            {sessions && sessions.map(session => (
-                <tr key={session}>
-                    <th>{session}</th>
-                    {dates.map(date => cell(session, date))}
-                    {/* 위의 cell 함수 실행으로 반환된 td 요소 출력*/}
-                </tr>  
-            ))}
-            </tbody>
-        </table>
-      </>
+                </thead>
+                <tbody>
+                {sessions && sessions.map(session => (
+                    <tr key={session}>
+                        <th>{session}</th>
+                        {dates.map(date => cell(session, date))}
+                        {/* 위의 cell 함수 실행으로 반환된 td 요소 출력*/}
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        </>
     )
 }
