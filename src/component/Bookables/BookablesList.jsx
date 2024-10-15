@@ -3,7 +3,7 @@ import Spinner from "../UI/Spinner.jsx";
 import { Link, useNavigate } from "react-router-dom";
 
 // bookables 는 전체 목록, bookable 은 목록 중에 선택한 하나의 객체를 컴포넌트 프롭으로 받음.
-export default function BookablesList ({bookable, bookables,getUrl}) {
+export default function BookablesList ({bookable, bookables, getUrl}) {
 
     const group = bookable?.group;
     const bookablesInGroup = bookables.filter(b => b.group === group);
@@ -17,8 +17,8 @@ export default function BookablesList ({bookable, bookables,getUrl}) {
             b => b.group === e.target.value
         );
         // setBookable(bookablesInSelectedGroup[0]);
-        // navigate(getUrl(bookablesInSelectedGroup[0].id));
-        navigate(`/bookables/${bookablesInSelectedGroup[0].id}`);
+        navigate(getUrl(bookablesInSelectedGroup[0].id)); // 상위 컴포넌트에서 url을 변경하도록 메소드를 실행해야 함
+        // navigate(`/bookables/${bookablesInSelectedGroup[0].id}`); -> 동작 오류
         // 단순히 상태값을 바꾸는 것이 아니고 새로운 url 로 요청을 보낸다.
     }
 
